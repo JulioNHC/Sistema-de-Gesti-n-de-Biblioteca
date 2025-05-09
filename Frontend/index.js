@@ -9,10 +9,13 @@ function onRequestHandler(){
         // 2 = HEADERS_RECEIVED, SE ESTA LLAMANDO AL METODO SEND()
         // 3 = LOADING, ESTA CARGANDO, ES DECIR, ESTA RECIBIENDO LA RESPUESTA.
         // 4 = DONE, se ha completado la operacion.
-        console.log (this.response);
+        
+        const data = JSON.parse(this.response); //convierte en JSON en array
+        const HTMLResponse = document
+        console.log (data);
     }
  }
 
  xhr.addEventListener("load", onRequestHandler);
- xhr.open("GET", `${API_URL}/clientes`)
+ xhr.open("GET", `${API_URL}/clientes/1`)
  xhr.send();
