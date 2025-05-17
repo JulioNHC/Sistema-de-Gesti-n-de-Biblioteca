@@ -5,7 +5,8 @@ const config = require('./config');
 
 const miembros = require('./modulos/Miembros/rutas');
 const autores = require('./modulos/Autores/rutas');
-const libros = require('./modulos/Libros/rutas')
+const libros = require('./modulos/Libros/rutas');
+const auth = require('./modulos/Auth/rutas')
 const error = require ('./red/errors')
 
 const app = express();
@@ -23,6 +24,7 @@ app.set('port', config.app.port)
 app.use('/api/miembros', miembros)
 app.use('/api/autor', autores)
 app.use('/api/libros', libros)
+app.use('/api/login', auth)
 app.use(error);
 
 module.exports = app;

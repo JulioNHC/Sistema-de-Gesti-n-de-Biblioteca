@@ -42,44 +42,48 @@ function todos(tabla){
     });
 }
 
-function uno(tabla, id){
+function uno(tabla, id) {
     return new Promise((resolve, reject) => {
-        conexion.query(`SELECT * FROM ${tabla} WHERE id = ${id}`, (error, result) => {
-            return error ? reject(error) : resolve(result);
+        // Validar tabla (esto es importante para evitar inyecciones de tablas)
+        const tablasPermitidas = ['usuario', 'autor', 'miembros', 'libros']; // Solo estas tablas están permitidas.
+        if (!tablasPermitidas.includes(tabla)) {
+            return reject(new Error('Tabla no permitida'));
+        }
+        
+        const sql = `SELECT * FROM ?? WHERE id_${tabla} = ?`; // Usamos ?? para el nombre de la tabla y ? para el parámetro del id.
+        conexion.query(sql, [tabla, id], (error, result) => {
+            if (error) {
+                console.error('Error SQL:', error); // <-- Esto ayuda mucho
+                return reject(error);
+            }
+            return resolve(result);
         });
     });
 }
 
-function insertar(tabla, data){
-    return new Promise((resolve, reject) => {
-        conexion.query(`INSERT INTO ${tabla} SET ?`,data, (error, result) => {
-            return error ? reject(error) : resolve(result);
-        });
-    });
-}
-
-function actualizar(tabla, data){
-    return new Promise((resolve, reject) => {
-        conexion.query(`UPDATE ${tabla} SET ? WHERE ID = ?`,[data, data.id], (error, result) => {
-            return error ? reject(error) : resolve(result);
-        });
-    });
-}
 
 function agregar(tabla,data){
-    if(!data.id || data.id == 0){
-        return insertar(tabla, data);
-    }else{
-        return actualizar(tabla, data);
-    }
+    return new Promise((resolve, reject) => {
+        conexion.query(`INSERT INTO ${tabla} SET ? ON DUPLICATE KEY UPDATE ?`,[data,data], (error, result) => {
+            return error ? reject(error) : resolve(result);
+        });
+    });
 }
 
 function eliminar(tabla, data){
     return new Promise((resolve, reject) => {
-        conexion.query(`DELETE FROM ${tabla} WHERE id = ?`,data.id, (error, result) => {
+        conexion.query(`DELETE FROM ${tabla} WHERE id = ?`,data, (error, result) => {
             return error ? reject(error) : resolve(result);
         });
     });
 }
 
-module.exports = {todos,uno,agregar,eliminar,}
+function query(tabla, consultar){
+    return new Promise((resolve, reject) => {
+        conexion.query(`SELECT * FROM ${tabla} WHERE ?`,consultar, (error, result) => {
+            return error ? reject(error) : resolve(result[0]);
+        });
+    });
+}
+
+module.exports = {todos,uno,agregar,eliminar,query}

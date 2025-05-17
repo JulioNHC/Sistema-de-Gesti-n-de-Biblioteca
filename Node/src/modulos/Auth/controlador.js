@@ -1,28 +1,52 @@
-const TABLA = 'autor';
+const TABLA = 'usuarios';
+const auth = require('../../auth');
+const bcrypt = require('bcrypt')
 
 module.exports = function(dbInyectada){
 
     let db = dbInyectada;
+    
     if(!db){
         db = require('../../DB/mysql');
     }
-    
-    function todos(){
-        return db.todos(TABLA);
+
+    async function login(usuario,password){
+        const data = await db.query(TABLA, {usuario:usuario});
+
+        return bcrypt.compare(password, data.password)
+            .then(resultado =>{
+                if(resultado === true){
+                    //generar un token
+                    return auth.asignarToken({...data})
+                }else{
+                    throw new Error('Informacion Invalida');
+                }
+
+            })
+
     }
 
-    function uno(id){
-        return db.uno(TABLA, id);
+
+
+    async function agregar(data){
+
+        const authData = {
+            id: data.id,
+        }
+
+        if(data.usuario){
+            authData.usuario = data.usuario
+
+        }
+
+        if(data.password){
+            authData.password = await bcrypt.hash(data.password.toString(),5);
+        }
+
+        return db.agregar(TABLA, authData);
     }
 
-    function agregar(body){
-        return db.agregar(TABLA, body);
-    }
-
-    function eliminar(body){
-        return db.eliminar(TABLA, body);
-    }
     return{
-        todos,uno,agregar,eliminar    
+        agregar,login   
     }
 }
