@@ -2,11 +2,11 @@ import React from 'react';
 import './assetss/css/App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/login';
-import Dashboard from './components/dashboard';
-import Editar from './components/editar'
-import Nuevo from './components/nuevo';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./components/login";
+import Dashboard from "./components/dashboard";
+import Editar from "./components/editar";
+import Nuevo from "./components/nuevo";
 
 function App() {
   return (
@@ -20,5 +20,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
