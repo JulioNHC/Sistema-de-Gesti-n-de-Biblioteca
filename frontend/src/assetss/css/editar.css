@@ -1,0 +1,22 @@
+body{
+    background: -webkit-linear-gradient(left, #0072ff, #00c6ff);
+}
+.contact-form{ /*Recuadro padre Blanco*/
+    background: #ffff;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    width: 70%;
+    border-radius: 10px 10px 10px 10px;
+}
+.contact-form form{
+    padding: 10%;
+}
+.contact-form form .row{
+    margin-bottom: -7%;
+}
+.contact-form h3{
+    margin-top: -10%;
+    text-align: center;
+    color: #0062cc;
+}
+

@@ -50,7 +50,7 @@ function uno(tabla, id) {
             return reject(new Error('Tabla no permitida'));
         }
         
-        const sql = `SELECT * FROM ?? WHERE id_${tabla} = ?`; // Usamos ?? para el nombre de la tabla y ? para el parámetro del id.
+        const sql = `SELECT * FROM ?? WHERE id = ?`; // Usamos ?? para el nombre de la tabla y ? para el parámetro del id.
         conexion.query(sql, [tabla, id], (error, result) => {
             if (error) {
                 console.error('Error SQL:', error); // <-- Esto ayuda mucho
